@@ -9,19 +9,13 @@ module.exports = {
     compilers: [{ version: "0.8.20" }, { version: "0.8.9" },{version:"0.5.16"},{version:"0.6.2"},{version:"0.6.6"},{version:"0.8.24"},{version:"0.4.18"}],
   },
   networks: {
-    goerli: {
-      url: "https://testnet-rpc.nordekscan.com/",
-      accounts: [
-        "0x0c5efd4ed532b1c91ce3791976eca2cf417af03190da285603f26c57d7effa1d",
-      ],
-    },
     nordek:{
     url:"https://mainnet-rpc.nordekscan.com/",
-    accounts:["0x0c5efd4ed532b1c91ce3791976eca2cf417af03190da285603f26c57d7effa1d"]},
+    accounts:["paste your private key here"]},
     nordektestnet:{
-      url: "https://testnet-explorer.nordekscan.com/",
+      url: "paste your private key here",
       accounts: [
-        "0x0c5efd4ed532b1c91ce3791976eca2cf417af03190da285603f26c57d7effa1d",
+        "",
       ],
     },
     
