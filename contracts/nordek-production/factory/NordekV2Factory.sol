@@ -19,8 +19,6 @@ contract NordekV2Factory is INordekV2Factory {
     uint256 public swapLimitBP;
 
     uint256 public swapFeeBP;
-    uint256 public addLiquidityFeeBP;
-    uint256 public removeLiquidityFeeBP;
 
     address public feeReceiver;
 
@@ -36,8 +34,6 @@ contract NordekV2Factory is INordekV2Factory {
         feeReceiver = _feeReceiver;
         swapLimitBP = 500;
         swapFeeBP = 500;
-        addLiquidityFeeBP = 500;
-        removeLiquidityFeeBP = 500;
         _admin.add(msg.sender);
     }
 
@@ -74,16 +70,6 @@ contract NordekV2Factory is INordekV2Factory {
     function setSwapFeeBP(uint256 value) external {
         require(_admin.has(msg.sender), 'NordekV2: FORBIDDEN');
         swapFeeBP = value;
-    }
-
-    function setAddLiquidityFeeBP(uint256 value) external {
-        require(_admin.has(msg.sender), 'NordekV2: FORBIDDEN');
-        addLiquidityFeeBP = value;
-    }
-
-    function setRemoveLiquidityFeeBP(uint256 value) external {
-        require(_admin.has(msg.sender), 'NordekV2: FORBIDDEN');
-        removeLiquidityFeeBP = value;
     }
 
     function allPairsLength() external view returns (uint) {
