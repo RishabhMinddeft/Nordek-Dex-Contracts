@@ -34,10 +34,4 @@ interface INordekV2Factory {
 
     function swapFeeBP() external view returns (uint256);
     function setSwapFeeBP(uint256 value) external;
-
-    function addLiquidityFeeBP() external view returns (uint256);
-    function setAddLiquidityFeeBP(uint256 value) external;
-
-    function removeLiquidityFeeBP() external view returns (uint256);
-    function setRemoveLiquidityFeeBP(uint256 value) external;
 }

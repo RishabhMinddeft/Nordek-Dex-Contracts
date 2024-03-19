@@ -17,7 +17,6 @@ contract NordekV2Factory is INordekV2Factory {
     mapping(address => mapping(address => address)) public getPair;
     address[] public allPairs;
     uint256 public swapLimitBP;
-
     uint256 public swapFeeBP;
 
     address public feeReceiver;
