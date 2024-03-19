@@ -11,11 +11,11 @@ module.exports = {
   networks: {
     nordek:{
     url:"https://mainnet-rpc.nordekscan.com/",
-    accounts:["paste your private key here"]},
+    accounts:["0c5efd4ed532b1c91ce3791976eca2cf417af03190da285603f26c57d7effa1d"]},
     nordektestnet:{
-      url: "paste your private key here",
+      url: "https://testnet-explorer.nordekscan.com/",
       accounts: [
-        "",
+        "0c5efd4ed532b1c91ce3791976eca2cf417af03190da285603f26c57d7effa1d",
       ],
     },
     

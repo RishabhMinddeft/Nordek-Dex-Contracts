@@ -18,7 +18,7 @@ async function main() {
 
   // await lock.waitForDeployment();
 
-  const weth = await hre.ethers.deployContract("WETH9");
+  const weth = await hre.ethers.deployContract("WNRK9");
 
   await weth.waitForDeployment();
   console.log("weth contract deployed at",weth.target)
