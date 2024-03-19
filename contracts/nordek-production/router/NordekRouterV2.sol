@@ -6,14 +6,14 @@ import './interfaces/INordekV2Router02.sol';
 import './libraries/NordekRouterV2Library.sol';
 import './libraries/SafeMath.sol';
 import './interfaces/IERC20.sol';
-import './interfaces/IWETH.sol';
+import './interfaces/IWNRK.sol';
 import './interfaces/INordekV2Factory.sol';
 
 contract NordekRouterV2 {
     using SafeMath for uint;
 
     address public immutable factory;
-    address public immutable WETH;
+    address public immutable WNRK;
 
     bytes constant MAIN_PAIR_INIT_CODE =
         hex'46dcc01628f53188fb69c0961e8f575bcab869dca658df1bd2be9bf2b1dfca25';
@@ -23,13 +23,13 @@ contract NordekRouterV2 {
         _;
     }
 
-    constructor(address _factory, address _WETH) public {
+    constructor(address _factory, address _WNRK) public {
         factory = _factory;
-        WETH = _WETH;
+        WNRK = _WNRK;
     }
 
     receive() external payable {
-        assert(msg.sender == WETH); // only accept ETH via fallback from the WETH contract
+        assert(msg.sender == WNRK); // only accept NRK via fallback from the WNRK contract
     }
 
     // **** ADD LIQUIDITY ****
@@ -127,7 +127,7 @@ contract NordekRouterV2 {
     {
         (amountToken, amountETH) = _addLiquidity(
             token,
-            WETH,
+            WNRK,
             amountTokenDesired,
             msg.value,
             amountTokenMin,
@@ -136,12 +136,12 @@ contract NordekRouterV2 {
         address pair = NordekRouterV2Library.pairFor(
             factory,
             token,
-            WETH,
+            WNRK,
             MAIN_PAIR_INIT_CODE
         );
         TransferHelper.safeTransferFrom(token, msg.sender, pair, amountToken);
-        IWETH(WETH).deposit{value: amountETH}();
-        assert(IWETH(WETH).transfer(pair, amountETH));
+        IWNRK(WNRK).deposit{value: amountETH}();
+        assert(IWNRK(WNRK).transfer(pair, amountETH));
         liquidity = INordekV2Pair(pair).mint(to);
         // refund dust eth, if any
         if (msg.value > amountETH)
@@ -183,7 +183,7 @@ contract NordekRouterV2 {
     ) public ensure(deadline) returns (uint amountToken, uint amountETH) {
         (amountToken, amountETH) = removeLiquidity(
             token,
-            WETH,
+            WNRK,
             liquidity,
             amountTokenMin,
             amountETHMin,
@@ -191,7 +191,7 @@ contract NordekRouterV2 {
             deadline
         );
         TransferHelper.safeTransfer(token, to, amountToken);
-        IWETH(WETH).withdraw(amountETH);
+        IWNRK(WNRK).withdraw(amountETH);
         TransferHelper.safeTransferETH(to, amountETH);
     }
     function removeLiquidityWithPermit(
@@ -248,7 +248,7 @@ contract NordekRouterV2 {
         address pair = NordekRouterV2Library.pairFor(
             factory,
             token,
-            WETH,
+            WNRK,
             MAIN_PAIR_INIT_CODE
         );
         uint value = approveMax ? uint(-1) : liquidity;
@@ -282,7 +282,7 @@ contract NordekRouterV2 {
     ) public ensure(deadline) returns (uint amountETH) {
         (, amountETH) = removeLiquidity(
             token,
-            WETH,
+            WNRK,
             liquidity,
             amountTokenMin,
             amountETHMin,
@@ -294,7 +294,7 @@ contract NordekRouterV2 {
             to,
             IERC20(token).balanceOf(address(this))
         );
-        IWETH(WETH).withdraw(amountETH);
+        IWNRK(WNRK).withdraw(amountETH);
         TransferHelper.safeTransferETH(to, amountETH);
     }
     function removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(
@@ -312,7 +312,7 @@ contract NordekRouterV2 {
         address pair = NordekRouterV2Library.pairFor(
             factory,
             token,
-            WETH,
+            WNRK,
             MAIN_PAIR_INIT_CODE
         );
         uint value = approveMax ? uint(-1) : liquidity;
@@ -438,7 +438,7 @@ contract NordekRouterV2 {
         address to,
         uint deadline
     ) external payable ensure(deadline) returns (uint[] memory amounts) {
-        require(path[0] == WETH, 'NordekV2Router: INVALID_PATH');
+        require(path[0] == WNRK, 'NordekV2Router: INVALID_PATH');
         amounts = NordekRouterV2Library.getAmountsOut(
             factory,
             msg.value,
@@ -450,9 +450,9 @@ contract NordekRouterV2 {
             amounts[amounts.length - 1] >= amountOutMin,
             'NordekV2Router: INSUFFICIENT_OUTPUT_AMOUNT'
         );
-        IWETH(WETH).deposit{value: amounts[0]}();
+        IWNRK(WNRK).deposit{value: amounts[0]}();
         assert(
-            IWETH(WETH).transfer(
+            IWNRK(WNRK).transfer(
                 NordekRouterV2Library.pairFor(
                     factory,
                     path[0],
@@ -471,7 +471,7 @@ contract NordekRouterV2 {
         address to,
         uint deadline
     ) external ensure(deadline) returns (uint[] memory amounts) {
-        require(path[path.length - 1] == WETH, 'NordekV2Router: INVALID_PATH');
+        require(path[path.length - 1] == WNRK, 'NordekV2Router: INVALID_PATH');
         amounts = NordekRouterV2Library.getAmountsIn(
             factory,
             amountOut,
@@ -499,7 +499,7 @@ contract NordekRouterV2 {
             (amounts[amounts.length - 1] *
                 INordekV2Factory(factory).swapFeeBP()) /
             10000;
-        IWETH(WETH).withdraw(withdrawAmount);
+        IWNRK(WNRK).withdraw(withdrawAmount);
         TransferHelper.safeTransferETH(to, withdrawAmount);
     }
     function swapExactTokensForETH(
@@ -509,7 +509,7 @@ contract NordekRouterV2 {
         address to,
         uint deadline
     ) external ensure(deadline) returns (uint[] memory amounts) {
-        require(path[path.length - 1] == WETH, 'NordekV2Router: INVALID_PATH');
+        require(path[path.length - 1] == WNRK, 'NordekV2Router: INVALID_PATH');
         amounts = NordekRouterV2Library.getAmountsOut(
             factory,
             amountIn,
@@ -537,7 +537,7 @@ contract NordekRouterV2 {
             (amounts[amounts.length - 1] *
                 INordekV2Factory(factory).swapFeeBP()) /
             10000;
-        IWETH(WETH).withdraw(withdrawAmount);
+        IWNRK(WNRK).withdraw(withdrawAmount);
         TransferHelper.safeTransferETH(to, withdrawAmount);
     }
     function swapETHForExactTokens(
@@ -546,7 +546,7 @@ contract NordekRouterV2 {
         address to,
         uint deadline
     ) external payable ensure(deadline) returns (uint[] memory amounts) {
-        require(path[0] == WETH, 'NordekV2Router: INVALID_PATH');
+        require(path[0] == WNRK, 'NordekV2Router: INVALID_PATH');
         amounts = NordekRouterV2Library.getAmountsIn(
             factory,
             amountOut,
@@ -558,9 +558,9 @@ contract NordekRouterV2 {
             amounts[0] <= msg.value,
             'NordekV2Router: EXCESSIVE_INPUT_AMOUNT'
         );
-        IWETH(WETH).deposit{value: amounts[0]}();
+        IWNRK(WNRK).deposit{value: amounts[0]}();
         assert(
-            IWETH(WETH).transfer(
+            IWNRK(WNRK).transfer(
                 NordekRouterV2Library.pairFor(
                     factory,
                     path[0],
@@ -660,11 +660,11 @@ contract NordekRouterV2 {
         address to,
         uint deadline
     ) external payable ensure(deadline) {
-        require(path[0] == WETH, 'NordekV2Router: INVALID_PATH');
+        require(path[0] == WNRK, 'NordekV2Router: INVALID_PATH');
         uint amountIn = msg.value;
-        IWETH(WETH).deposit{value: amountIn}();
+        IWNRK(WNRK).deposit{value: amountIn}();
         assert(
-            IWETH(WETH).transfer(
+            IWNRK(WNRK).transfer(
                 NordekRouterV2Library.pairFor(
                     factory,
                     path[0],
@@ -689,7 +689,7 @@ contract NordekRouterV2 {
         address to,
         uint deadline
     ) external ensure(deadline) {
-        require(path[path.length - 1] == WETH, 'NordekV2Router: INVALID_PATH');
+        require(path[path.length - 1] == WNRK, 'NordekV2Router: INVALID_PATH');
         TransferHelper.safeTransferFrom(
             path[0],
             msg.sender,
@@ -702,12 +702,12 @@ contract NordekRouterV2 {
             amountIn
         );
         _swapSupportingFeeOnTransferTokens(path, address(this));
-        uint amountOut = IERC20(WETH).balanceOf(address(this));
+        uint amountOut = IERC20(WNRK).balanceOf(address(this));
         require(
             amountOut >= amountOutMin,
             'NordekV2Router: INSUFFICIENT_OUTPUT_AMOUNT'
         );
-        IWETH(WETH).withdraw(amountOut);
+        IWNRK(WNRK).withdraw(amountOut);
         TransferHelper.safeTransferETH(to, amountOut);
     }
 }
