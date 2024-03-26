@@ -1733,9 +1733,9 @@ async function main() {
   
     // Get the signer (default account) from Hardhat
     const [signer] = await ethers.getSigners();
-    const routerContract = "0x891F11AB45B0c5E9eDBF31c56892a90e37B93b70"
+    const routerContract = "0x0674b75592A1076cd504F9191aD49bf30df3926b"
     // Connect to the deployed contract
-    const tokenInstance = new ethers.Contract("0xceBa082c764292e475A026BD3ED7cF89369c94cF",erc20ABI,signer)
+    const tokenInstance = new ethers.Contract("0x5D8A26d8Eb246b84C2c7e3aC016bbd86F600E977",erc20ABI,signer)
     const contract = new ethers.Contract(routerContract, routerABI,signer );
   
     // Call setFeeToSetter function
@@ -1743,8 +1743,8 @@ async function main() {
     // const approveRes = await tokenInstance.approve(routerContract,hre.ethers.parseEther("100000"))
     // const res = await contract.addLiquidityETH("0xceBa082c764292e475A026BD3ED7cF89369c94cF",hre.ethers.parseEther("10000"),"1","0",newFeeToSetter,96259257649216,{value:hre.ethers.parseEther("1")});
     // console.log("res111111111",res);
-    // console.log("************************************")
-       const res2 = await contract.swapExactTokensForETH(hre.ethers.parseEther("1"),0,["0xceBa082c764292e475A026BD3ED7cF89369c94cF","0x637e912D9dC788355FE827ef872C063951282f67"],newFeeToSetter,297345629759756)
+    // console.log("************************************",approveRes);
+       const res2 = await contract.swapExactETHForTokens(0,["0xD45f73bd333DFA22de9Cdec62050109E3276c710","0x5D8A26d8Eb246b84C2c7e3aC016bbd86F600E977"],newFeeToSetter,999999999999999,{value:hre.ethers.parseEther("1")})
     console.log("setFeeToSetter called successfully!",res2);
   }
   main()

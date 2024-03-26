@@ -16,7 +16,6 @@ contract NordekV2Factory is INordekV2Factory {
 
     mapping(address => mapping(address => address)) public getPair;
     address[] public allPairs;
-    uint256 public swapLimitBP;
     uint256 public swapFeeBP;
 
     address public feeReceiver;
@@ -31,8 +30,7 @@ contract NordekV2Factory is INordekV2Factory {
     constructor(address _feeToSetter, address _feeReceiver) public {
         feeToSetter = _feeToSetter;
         feeReceiver = _feeReceiver;
-        swapLimitBP = 500;
-        swapFeeBP = 500;
+        swapFeeBP = 100;
         _admin.add(msg.sender);
     }
 
@@ -59,11 +57,6 @@ contract NordekV2Factory is INordekV2Factory {
     function setFeeReceiver(address _feeReceiver) external {
         require(_admin.has(msg.sender), 'NordekV2: FORBIDDEN');
         feeReceiver = _feeReceiver;
-    }
-
-    function setSwapLimitBP(uint256 value) external {
-        require(_admin.has(msg.sender), 'NordekV2: FORBIDDEN');
-        swapLimitBP = value;
     }
 
     function setSwapFeeBP(uint256 value) external {

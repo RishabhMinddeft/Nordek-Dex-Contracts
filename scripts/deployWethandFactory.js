@@ -24,7 +24,7 @@ async function main() {
   console.log("weth contract deployed at",weth.target)
 
   //set 
-  const factory = await hre.ethers.deployContract("NordekV2Factory", ["0x8D5F686e8d3F91678a8E2F3B327eFD8533567146","0x8D5F686e8d3F91678a8E2F3B327eFD8533567146"]);
+  const factory = await hre.ethers.deployContract("NordekV2Factory", ["Fee To setter address here","fee to reciever address here"]);
 
   await factory.waitForDeployment();
   console.log("Factory contract deployed at",factory.target)

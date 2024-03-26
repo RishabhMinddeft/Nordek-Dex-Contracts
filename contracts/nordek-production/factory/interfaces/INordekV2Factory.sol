@@ -29,9 +29,6 @@ interface INordekV2Factory {
     function setFeeTo(address) external;
     function setFeeToSetter(address) external;
 
-    function swapLimitBP() external view returns (uint256);
-    function setSwapLimitBP(uint256 value) external;
-
     function swapFeeBP() external view returns (uint256);
     function setSwapFeeBP(uint256 value) external;
 }

@@ -16,7 +16,7 @@ contract NordekRouterV2 {
     address public immutable WNRK;
 
     bytes constant MAIN_PAIR_INIT_CODE =
-        hex'46dcc01628f53188fb69c0961e8f575bcab869dca658df1bd2be9bf2b1dfca25';
+        hex'bdb1434088c80e45d539942c49b70ecb478982edf71902719a57dcbf9e1d033f';
 
     modifier ensure(uint deadline) {
         require(deadline >= block.timestamp, 'NordekV2Router: EXPIRED');
@@ -380,7 +380,6 @@ contract NordekRouterV2 {
         amounts = NordekRouterV2Library.getAmountsOut(
             factory,
             amountIn,
-            INordekV2Factory(factory).swapFeeBP(),
             path,
             MAIN_PAIR_INIT_CODE
         );
@@ -411,7 +410,6 @@ contract NordekRouterV2 {
         amounts = NordekRouterV2Library.getAmountsIn(
             factory,
             amountOut,
-            INordekV2Factory(factory).swapFeeBP(),
             path,
             MAIN_PAIR_INIT_CODE
         );
@@ -442,7 +440,6 @@ contract NordekRouterV2 {
         amounts = NordekRouterV2Library.getAmountsOut(
             factory,
             msg.value,
-            INordekV2Factory(factory).swapFeeBP(),
             path,
             MAIN_PAIR_INIT_CODE
         );
@@ -475,7 +472,6 @@ contract NordekRouterV2 {
         amounts = NordekRouterV2Library.getAmountsIn(
             factory,
             amountOut,
-            INordekV2Factory(factory).swapFeeBP(),
             path,
             MAIN_PAIR_INIT_CODE
         );
@@ -495,12 +491,8 @@ contract NordekRouterV2 {
             amounts[0]
         );
         _swap(amounts, path, address(this));
-        uint256 withdrawAmount = amounts[amounts.length - 1] -
-            (amounts[amounts.length - 1] *
-                INordekV2Factory(factory).swapFeeBP()) /
-            10000;
-        IWNRK(WNRK).withdraw(withdrawAmount);
-        TransferHelper.safeTransferETH(to, withdrawAmount);
+        IWNRK(WNRK).withdraw(amounts[amounts.length - 1]);
+        TransferHelper.safeTransferETH(to, amounts[amounts.length - 1]);
     }
     function swapExactTokensForETH(
         uint amountIn,
@@ -513,7 +505,6 @@ contract NordekRouterV2 {
         amounts = NordekRouterV2Library.getAmountsOut(
             factory,
             amountIn,
-            INordekV2Factory(factory).swapFeeBP(),
             path,
             MAIN_PAIR_INIT_CODE
         );
@@ -533,12 +524,8 @@ contract NordekRouterV2 {
             amounts[0]
         );
         _swap(amounts, path, address(this));
-        uint256 withdrawAmount = amounts[amounts.length - 1] -
-            (amounts[amounts.length - 1] *
-                INordekV2Factory(factory).swapFeeBP()) /
-            10000;
-        IWNRK(WNRK).withdraw(withdrawAmount);
-        TransferHelper.safeTransferETH(to, withdrawAmount);
+        IWNRK(WNRK).withdraw(amounts[amounts.length - 1]);
+        TransferHelper.safeTransferETH(to, amounts[amounts.length - 1]);
     }
     function swapETHForExactTokens(
         uint amountOut,
@@ -550,7 +537,6 @@ contract NordekRouterV2 {
         amounts = NordekRouterV2Library.getAmountsIn(
             factory,
             amountOut,
-            INordekV2Factory(factory).swapFeeBP(),
             path,
             MAIN_PAIR_INIT_CODE
         );
@@ -610,8 +596,7 @@ contract NordekRouterV2 {
                 amountOutput = NordekRouterV2Library.getAmountOut(
                     amountInput,
                     reserveInput,
-                    reserveOutput,
-                    INordekV2Factory(factory).swapFeeBP()
+                    reserveOutput
                 );
             }
             (uint amount0Out, uint amount1Out) = input == token0

@@ -5,10 +5,10 @@ import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 
-contract MDT is ERC20, Ownable, ERC20Burnable {
+contract TT5 is ERC20, Ownable, ERC20Burnable {
     constructor(
         uint256 initialSupply
-    ) ERC20('Test Token', 'MDT') Ownable(msg.sender) {
+    ) ERC20('Test Token 5', 'TT5') Ownable(msg.sender) {
         _mint(msg.sender, initialSupply);
     }
 

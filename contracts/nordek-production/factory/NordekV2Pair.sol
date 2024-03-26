@@ -66,7 +66,7 @@ contract NordekV2Pair is INordekV2Pair, NordekV2ERC20 {
         );
     }
 
-    event Mint(address indexed sender, uint amount0, uint amount1, uint fee);
+    event Mint(address indexed sender, uint amount0, uint amount1);
     event Burn(
         address indexed sender,
         uint amount0,
@@ -218,11 +218,7 @@ contract NordekV2Pair is INordekV2Pair, NordekV2ERC20 {
         );
         (uint112 _reserve0, uint112 _reserve1, ) = getReserves(); // gas savings
         require(
-            amount0Out <
-                ((_reserve0 * INordekV2Factory(factory).swapLimitBP()) /
-                    MAX_BP) &&
-                amount1Out <
-                (_reserve1 * INordekV2Factory(factory).swapLimitBP() * MAX_BP),
+            amount0Out < _reserve0 && amount1Out < _reserve1,
             'NordekV2: INSUFFICIENT_LIQUIDITY'
         );
 
